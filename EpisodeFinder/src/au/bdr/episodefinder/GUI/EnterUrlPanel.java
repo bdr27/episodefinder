@@ -5,6 +5,7 @@
 
 package au.bdr.episodefinder.GUI;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,14 +18,14 @@ import javax.swing.JTextField;
  *
  * @author Brendan Russo
  */
-public class EnterUrl extends JPanel{
+public class EnterUrlPanel extends JPanel{
     private JTextField url = new JTextField();
     private JButton confirm = new JButton("Enter");
     
     /*
      * Creates the JPanel with a label and a button
      */
-    public EnterUrl(){
+    public EnterUrlPanel(){
         this.setLayout(new FlowLayout());
         url.setColumns(40);
         this.add(url);
@@ -34,5 +35,9 @@ public class EnterUrl extends JPanel{
     
     public JButton getConfirm(){
         return confirm;
+    }
+    
+    public JTextField getUrl(){
+        return url;
     }
 }
