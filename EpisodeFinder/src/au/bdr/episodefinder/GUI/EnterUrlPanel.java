@@ -40,4 +40,8 @@ public class EnterUrlPanel extends JPanel{
     public JTextField getUrl(){
         return url;
     }
+
+    public void clearText() {
+        url.setText("");
+    }
 }

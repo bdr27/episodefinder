@@ -4,22 +4,31 @@
  */
 package au.bdr.episodefinder.main;
 
+import au.bdr.episodefinder.util.Debug;
 import au.bdr.episodefinder.GUI.*;
+import au.bdr.episodefinder.util.Show;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Brendan Russo
  */
 public class Main implements ActionListener {
+
     private MainFrame mainFrame;
     private EnterUrlPanel enterUrl;
     private ShowListPanel showListPanel;
     private final boolean DEBUG = new Debug().getDebug();
-    
-    public Main(){
+    private ArrayList<Show> listOfShows = new ArrayList<Show>();
+
+    public Main() {
         mainFrame = new MainFrame();
         enterUrl = new EnterUrlPanel();
         showListPanel = new ShowListPanel();
@@ -35,17 +44,47 @@ public class Main implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch(e.getActionCommand().toLowerCase()){
+        switch (e.getActionCommand().toLowerCase()) {
             case "enter":
-                if(DEBUG){
-                    System.out.println(enterUrl.getUrl().getText());
+                String url = enterUrl.getUrl().getText();
+                if (DEBUG) {
+                    System.out.println(url);
+                }
+                //Creates an object and checks url
+                if (checkUrl(url)) {
+                    if (DEBUG) {
+                        System.out.println("Success");
+                    }
                 }
                 break;
             default:
-                if(DEBUG){
+                if (DEBUG) {
                     System.out.println("Nothing");
                 }
                 break;
         }
+    }
+
+    public boolean checkUrl(String url) {
+        enterUrl.clearText();
+        Show show = new Show();
+        boolean exists = false;
+        try {
+            show.connectUrl(url);   
+            show = newShow(show, url);
+            exists = true;            
+            listOfShows.add(show);
+        } catch (IOException ex) {            
+            JOptionPane.showMessageDialog(null, url + " is not a valid address");
+        } finally {
+            return exists;
+        }
+    }
+    
+    public Show newShow(Show show, String url){
+        show.disconectUrl();
+        show.setUrl(url);
+        show.setNameWithUrl(url);
+        return show;
     }
 }
