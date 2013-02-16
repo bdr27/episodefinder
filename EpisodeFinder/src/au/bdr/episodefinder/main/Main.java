@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,11 +73,20 @@ public class Main implements ActionListener {
         try {
             show.connectUrl(url);   
             show = newShow(show, url);
+            if(DEBUG){
+                show.loadHtml();
+                show.loadEpisodes();
+            }
             exists = true;            
             listOfShows.add(show);
-        } catch (IOException ex) {            
+        } catch (IOException ex) { 
+            System.out.println(ex.toString());
             JOptionPane.showMessageDialog(null, url + " is not a valid address");
-        } finally {
+        } catch (ParseException ex){
+            System.out.println(ex.toString());
+            JOptionPane.showMessageDialog(null, "unknown date conversion error");
+        } 
+        finally {
             return exists;
         }
     }

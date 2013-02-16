@@ -4,20 +4,20 @@
  */
 package au.bdr.episodefinder.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -29,6 +29,8 @@ public class Show {
     private String name;
     private String url;
     HttpURLConnection connection = null;
+    private Document html;
+    private ArrayList<Episode> episodes = new ArrayList<Episode>();
 
     public Show(String name, String url) {
         this.name = name;
@@ -43,7 +45,6 @@ public class Show {
      * if the wrong response is found
      */
     public void connectUrl(String url) throws IOException {
-        url = url.replaceFirst("https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
         URL website = new URL(url);
         connection = (HttpURLConnection) website.openConnection();
         connection.setRequestMethod("HEAD");
@@ -51,11 +52,80 @@ public class Show {
         if (responseCode != 200) {
             throw new IOException();
         }
-        InputStream is = website.openStream();  // throws an IOException
-        DataInputStream dis = new DataInputStream(new BufferedInputStream(is));
-        String line;
-        while ((line = dis.readLine()) != null) {
-            System.out.println(line);
+        html = Jsoup.connect(url).get();
+    }
+
+    public void loadHtml() throws IOException {
+        html = Jsoup.connect(url).get();
+    }
+
+    public void loadEpisodes() throws ParseException {
+        Elements tables = html.select("table.wikitable.plainrowheaders");
+        int seasonCounter = 1;
+        int seasonNumber = 0;
+        int airDate = 0;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        //Loop through all the tables in the html page
+        for (int i = 0; i < tables.size(); i++) {
+            boolean containsSeason = false;
+            boolean containsEpisode = false;
+
+            //Gets all the table headers for the current table
+            Elements tableHeaders = tables.get(i).getElementsByTag("th");
+
+            //Loops through all table headers searching for season and air date to see if it's part of the episodes
+            for (int j = 0; j < tableHeaders.size(); j++) {
+                String header = tableHeaders.get(j).toString().toLowerCase();
+
+                //Checks if there is season and sets where in the table the season number is
+                if (header.contains("season")) {
+                    if (DEBUG) {
+                        System.out.println("I contain season");
+                    }
+                    seasonNumber = j - 1;
+                    containsSeason = true;
+                } //Checks the air date and sets where the air date is in the table
+                else if (header.contains("air") && header.contains("date")) {
+                    if (DEBUG) {
+                        System.out.println("I contain date");
+                    }
+                    containsEpisode = true;
+                    airDate = j - 1;
+                }
+            }
+
+            //It is a table that contains the required information
+            if (containsSeason && containsEpisode) {
+                if (DEBUG) {
+                    System.out.println("Season Number: " + seasonCounter);
+                }
+                Elements tableRows = tables.get(i).getElementsByTag("tr");
+                System.out.println(tableRows.size());
+                for (int k = 1; k < tableRows.size(); k++) {
+                    Elements tableData = tableRows.get(k).getElementsByTag("td");
+                    if (DEBUG) {
+                        System.out.println("Season Location: " + seasonNumber + " Air Date Location: " + airDate);
+                    }
+                    String episodeNumber = tableData.get(seasonNumber).text();
+                    String date = tableData.get(airDate).text();
+                    int index = date.length();
+                    if(date.contains("(")){
+                        index = date.indexOf((int)'(') - 1;
+                    }
+                    date = date.substring(0, index);
+                    Date simpleDate = formatter.parse(date);
+                    
+                    if (DEBUG) {
+                        System.out.println("Simple date: " + simpleDate.toString());
+                        System.out.println("Season: " + seasonCounter + ", Episode: " + episodeNumber + ", Air Date: " + date);
+                    }
+                }
+                seasonCounter++;
+            }
+            if (DEBUG) {
+                System.out.println("Next...\n");
+            }
         }
     }
 
