@@ -64,7 +64,7 @@ public class Show {
         int seasonCounter = 1;
         int seasonNumber = 0;
         int airDate = 0;
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
 
         //Loop through all the tables in the html page
         for (int i = 0; i < tables.size(); i++) {
@@ -109,11 +109,7 @@ public class Show {
                     }
                     String episodeNumber = tableData.get(seasonNumber).text();
                     String date = tableData.get(airDate).text();
-                    int index = date.length();
-                    if(date.contains("(")){
-                        index = date.indexOf((int)'(') - 1;
-                    }
-                    date = date.substring(0, index);
+                    date = date.trim();
                     Date simpleDate = formatter.parse(date);
                     
                     if (DEBUG) {
