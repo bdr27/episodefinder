@@ -52,10 +52,10 @@ public class Main implements ActionListener {
                     System.out.println(url);
                 }
                 //Creates an object and checks url
-                if (checkUrl(url)) {
+            //    if (checkUrl(url)) {
                     if (DEBUG) {
                         System.out.println("Success");
-                    }
+                 //   }
                 }
                 break;
             default:
@@ -66,35 +66,35 @@ public class Main implements ActionListener {
         }
     }
 
-    public boolean checkUrl(String url) {
-        enterUrl.clearText();
-        Show show = new Show();
-        boolean exists = false;
-        try {
-            show.connectUrl(url);   
-            show = newShow(show, url);
-            if(DEBUG){
-                show.loadHtml();
-                show.loadEpisodes();
-            }
-            exists = true;            
-            listOfShows.add(show);
-        } catch (IOException ex) { 
-            System.out.println(ex.toString());
-            JOptionPane.showMessageDialog(null, url + " is not a valid address");
-        } catch (ParseException ex){
-            System.out.println(ex.toString());
-            JOptionPane.showMessageDialog(null, "unknown date conversion error");
-        } 
-        finally {
-            return exists;
-        }
-    }
-    
-    public Show newShow(Show show, String url){
-        show.disconectUrl();
-        show.setUrl(url);
-        show.setNameWithUrl(url);
-        return show;
-    }
+//    public boolean checkUrl(String url) {
+//        enterUrl.clearText();
+//        Show show = new Show();
+//        boolean exists = false;
+//        try {
+//            show.connectUrl(url);   
+//            show = newShow(show, url);
+//            if(DEBUG){
+//                show.loadHtml();
+//                show.loadEpisodes();
+//            }
+//            exists = true;            
+//            listOfShows.add(show);
+//        } catch (IOException ex) { 
+//            System.out.println(ex.toString());
+//            JOptionPane.showMessageDialog(null, url + " is not a valid address");
+//        } catch (ParseException ex){
+//            System.out.println(ex.toString());
+//            JOptionPane.showMessageDialog(null, "unknown date conversion error");
+//        } 
+//        finally {
+//            return exists;
+//        }
+//    }
+//    
+//    public Show newShow(Show show, String url){
+//        show.disconectUrl();
+//        show.setUrl(url);
+//        show.setNameWithUrl(url);
+//        return show;
+//    }
 }
