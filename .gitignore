@@ -5,3 +5,4 @@
 *.war
 *.ear
 /EpisodeFinder/nbproject/private/
+/EpisodeFinder/build/

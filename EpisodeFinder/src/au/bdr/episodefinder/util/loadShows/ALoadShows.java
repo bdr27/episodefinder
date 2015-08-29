@@ -13,8 +13,8 @@ import java.util.ArrayList;
  * @author Brendan
  */
 public abstract class ALoadShows {
-    ArrayList<Show> shows;
-    String location;
+    protected ArrayList<Show> shows;
+    protected String location;
     
     public ALoadShows(String location){
         this.location = location;

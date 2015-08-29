@@ -33,8 +33,8 @@ public class Shows {
                 String[] line = fin.nextLine().split(",,,");
                 String name = line[0];
                 String url = line[1];
-                Show show = new Show(url, name);
-                shows.add(show);
+                //Show show = new Show(url, name);
+                //shows.add(show);
             }
             fin.close();
             success = true;
@@ -51,8 +51,8 @@ public class Shows {
             PrintWriter fout = new PrintWriter(filename);
             //Loops through all array scores and prints to file
             for (Show show : shows) {
-                fout.printf("%s,,,%s%n", show.getName(),
-                        show.getUrl());
+                fout.printf("%s,,,%n", show.getName());
+                        //show.getUrl());
             }
             fout.close();
             success = true;

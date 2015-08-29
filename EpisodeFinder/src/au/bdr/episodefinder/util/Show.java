@@ -6,24 +6,42 @@ package au.bdr.episodefinder.util;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Show {
-    private String url = "";
     private String name = "";
+    private ArrayList<Episode> episodes;
     
     public Show() {
     }
     
-    public Show(String url, String name){
-        this.url = url;
+    public Show(String name, ArrayList<Episode> episodes){
+        //this.url = url;
         this.name = name;
+        this.episodes = episodes;
+    }
+    
+    public Show(String name){
+        this.name = name;
+    }
+    
+    public void setEpisodes(ArrayList<Episode> episodes){
+        this.episodes = episodes;
+    }
+    
+    public void addEpisode(Episode episode){
+        if (episodes == null)
+        {
+            episodes = new ArrayList<>();
+        }
+        episodes.add(episode);
     }
 
     /*
      * Sets the url and the show name checks that the page can be reached and
      * if the site is wikipdedia
      */
-    public boolean setShow(String url){
+    /*public boolean setShow(String url){
         boolean success = false;
         if(checkUrl(url)){
             if(url.contains("wikipedia")){
@@ -41,7 +59,7 @@ public class Show {
     /*
      * Checks that the url can be reached
      */
-    private boolean checkUrl(String url) {
+    /*private boolean checkUrl(String url) {
         HttpURLConnection connection = null;
         try{
             URL website = new URL(url);
@@ -57,9 +75,9 @@ public class Show {
             return false;
         }
         return true;
-    }
-    public String getUrl(){
-        return url;
+    }*/
+    public ArrayList<Episode> getEpisodes(){
+        return episodes;
     }
     public String getName(){
         return name;
@@ -67,7 +85,7 @@ public class Show {
     
     @Override
     public String toString(){
-        return "name: " + name + " url: " + url;
+        return "name: " + name;// + " url: " + url;
     }
 }
 // OLD SHOW
