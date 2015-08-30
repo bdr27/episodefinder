@@ -55,7 +55,7 @@ public class MainCLI {
         Show show = new Show();
         System.out.print("Please enter the url of the episode list\nurl: ");
         String url = keyboard.nextLine();
-        if(show.setShow(url)){
+        /*if(show.setShow(url)){
             if(shows.addShow(show)){
                 addedShow = true;
             }
@@ -64,7 +64,7 @@ public class MainCLI {
             System.out.println("Success");
         }else{
             System.out.println("Failure");
-        }
+        }*/
     }
     
     private static void viewCurrentShows(){
