@@ -16,7 +16,7 @@ public class Episode {
     private int episode;
     private Date airDate;
     
-    Episode(int season, int episode, Date airDate){
+    public Episode(int season, int episode, Date airDate){
         this.season = season;
         this.episode = episode;
         this.airDate = airDate;
